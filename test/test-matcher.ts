@@ -40,4 +40,35 @@ describe("Matcher tests", () => {
         );
         expect(result).to.equal(expected);
     });
+
+    it("should return one subtree - CallExpression with metavariable", () => {
+        let codeAST: File = makeCodeAST("let a=3; r.get('/events')");
+        let patternAST: Expression = makePatternAST(
+            "router/**/.get('/events')"
+        );
+
+        const result = JSON.stringify(
+            patternMatcher(codeAST, patternAST),
+            null,
+            4
+        );
+        let expected = fs.readFileSync(
+            "./test/data/matcher-callexpr-meta.txt",
+            "utf8"
+        );
+        expect(result).to.equal(expected);
+    });
+
+    it("should return no one subtree - CallExpression", () => {
+        let codeAST: File = makeCodeAST("let a=3; r.get('/events')");
+        let patternAST: Expression = makePatternAST("router.get('/events')");
+
+        const result = JSON.stringify(
+            patternMatcher(codeAST, patternAST),
+            null,
+            4
+        );
+        let expected = "[]";
+        expect(result).to.equal(expected);
+    });
 });

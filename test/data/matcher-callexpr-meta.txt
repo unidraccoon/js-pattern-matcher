@@ -1,0 +1,89 @@
+[
+    {
+        "type": "CallExpression",
+        "start": 9,
+        "end": 25,
+        "loc": {
+            "start": {
+                "line": 1,
+                "column": 9
+            },
+            "end": {
+                "line": 1,
+                "column": 25
+            }
+        },
+        "callee": {
+            "type": "MemberExpression",
+            "start": 9,
+            "end": 14,
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 9
+                },
+                "end": {
+                    "line": 1,
+                    "column": 14
+                }
+            },
+            "object": {
+                "type": "Identifier",
+                "start": 9,
+                "end": 10,
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "identifierName": "r"
+                },
+                "name": "r"
+            },
+            "computed": false,
+            "property": {
+                "type": "Identifier",
+                "start": 11,
+                "end": 14,
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 11
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 14
+                    },
+                    "identifierName": "get"
+                },
+                "name": "get"
+            }
+        },
+        "arguments": [
+            {
+                "type": "StringLiteral",
+                "start": 15,
+                "end": 24,
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 24
+                    }
+                },
+                "extra": {
+                    "rawValue": "/events",
+                    "raw": "'/events'"
+                },
+                "value": "/events"
+            }
+        ]
+    }
+]
