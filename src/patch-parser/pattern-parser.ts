@@ -10,10 +10,12 @@ const removeASTNodes = (ast: any) => {
         delete ast["loc"];
         delete ast["start"];
         delete ast["end"];
-        delete ast["leadingComments"]
+        delete ast["leadingComments"];
         if (ast["trailingComments"] != undefined) {
+            ast["type"] == "ObjectProperty"
+                ? delete ast["value"]
+                : delete ast["name"];
             delete ast["trailingComments"];
-            delete ast["name"]
         }
         const values = Object.values(ast).filter(
             (v) => Array.isArray(v) || typeof v === "object"

@@ -25,22 +25,6 @@ describe("Matcher tests", () => {
         expect(result).to.equal(expected);
     });
 
-    it("should return one subtree - ObjectExpression", () => {
-        let codeAST: File = makeCodeAST("fetch({url: '/example'})");
-        let patternAST: Expression = makePatternAST("{url: '/example'}");
-
-        const result = JSON.stringify(
-            [patternMatcher(codeAST, patternAST)],
-            null,
-            4
-        );
-        let expected = fs.readFileSync(
-            "./test/data/matcher-objexpr.txt",
-            "utf8"
-        );
-        expect(result).to.equal(expected);
-    });
-
     it("should return one subtree - CallExpression with metavariable", () => {
         let codeAST: File = makeCodeAST("let a=3; r.get('/events')");
         let patternAST: Expression = makePatternAST(
@@ -69,6 +53,38 @@ describe("Matcher tests", () => {
             4
         );
         let expected = "[]";
+        expect(result).to.equal(expected);
+    });
+
+    it("should return one subtree - ObjectExpression", () => {
+        let codeAST: File = makeCodeAST("fetch({url: '/example'})");
+        let patternAST: Expression = makePatternAST("{url: '/example'}");
+
+        const result = JSON.stringify(
+            [patternMatcher(codeAST, patternAST)],
+            null,
+            4
+        );
+        let expected = fs.readFileSync(
+            "./test/data/matcher-objexpr.txt",
+            "utf8"
+        );
+        expect(result).to.equal(expected);
+    });
+
+    it("should return one subtree - ObjectExpression with metavariable", () => {
+        let codeAST: File = makeCodeAST("fetch({url: '/example'})");
+        let patternAST: Expression = makePatternAST("{url: url/**/}");
+
+        const result = JSON.stringify(
+            patternMatcher(codeAST, patternAST),
+            null,
+            4
+        );
+        let expected = fs.readFileSync(
+            "./test/data/matcher-objexpr-meta.txt",
+            "utf8"
+        );
         expect(result).to.equal(expected);
     });
 });
