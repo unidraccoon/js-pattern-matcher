@@ -1,9 +1,22 @@
 [
-    [
-        {
-            "type": "CallExpression",
+    {
+        "type": "CallExpression",
+        "start": 9,
+        "end": 30,
+        "loc": {
+            "start": {
+                "line": 1,
+                "column": 9
+            },
+            "end": {
+                "line": 1,
+                "column": 30
+            }
+        },
+        "callee": {
+            "type": "MemberExpression",
             "start": 9,
-            "end": 30,
+            "end": 19,
             "loc": {
                 "start": {
                     "line": 1,
@@ -11,13 +24,13 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 30
+                    "column": 19
                 }
             },
-            "callee": {
-                "type": "MemberExpression",
+            "object": {
+                "type": "Identifier",
                 "start": 9,
-                "end": 19,
+                "end": 15,
                 "loc": {
                     "start": {
                         "line": 1,
@@ -25,67 +38,52 @@
                     },
                     "end": {
                         "line": 1,
+                        "column": 15
+                    },
+                    "identifierName": "router"
+                },
+                "name": "router"
+            },
+            "computed": false,
+            "property": {
+                "type": "Identifier",
+                "start": 16,
+                "end": 19,
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 1,
                         "column": 19
+                    },
+                    "identifierName": "get"
+                },
+                "name": "get"
+            }
+        },
+        "arguments": [
+            {
+                "type": "StringLiteral",
+                "start": 20,
+                "end": 29,
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 29
                     }
                 },
-                "object": {
-                    "type": "Identifier",
-                    "start": 9,
-                    "end": 15,
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 9
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 15
-                        },
-                        "identifierName": "router"
-                    },
-                    "name": "router"
+                "extra": {
+                    "rawValue": "/events",
+                    "raw": "'/events'"
                 },
-                "computed": false,
-                "property": {
-                    "type": "Identifier",
-                    "start": 16,
-                    "end": 19,
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 16
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 19
-                        },
-                        "identifierName": "get"
-                    },
-                    "name": "get"
-                }
-            },
-            "arguments": [
-                {
-                    "type": "StringLiteral",
-                    "start": 20,
-                    "end": 29,
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 20
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 29
-                        }
-                    },
-                    "extra": {
-                        "rawValue": "/events",
-                        "raw": "'/events'"
-                    },
-                    "value": "/events"
-                }
-            ]
-        }
-    ]
+                "value": "/events"
+            }
+        ]
+    }
 ]

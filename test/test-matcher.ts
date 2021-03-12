@@ -5,8 +5,6 @@ import * as fs from "fs";
 import { makeCodeAST } from "../src/ast-builder/ast-builder";
 import { makePatternAST } from "../src/patch-parser/pattern-parser";
 import { patternMatcher } from "../src/subtree-matcher/subtree-matcher";
-// if you used the '@types/mocha' method to install mocha type definitions, uncomment the following line
-// import 'mocha';
 
 describe("Matcher tests", () => {
     it("should return one subtree - CallExpression", () => {
@@ -14,7 +12,7 @@ describe("Matcher tests", () => {
         let patternAST: Expression = makePatternAST("router.get('/events')");
 
         const result = JSON.stringify(
-            [patternMatcher(codeAST, patternAST)],
+            patternMatcher(codeAST, patternAST),
             null,
             4
         );
@@ -61,7 +59,7 @@ describe("Matcher tests", () => {
         let patternAST: Expression = makePatternAST("{url: '/example'}");
 
         const result = JSON.stringify(
-            [patternMatcher(codeAST, patternAST)],
+            patternMatcher(codeAST, patternAST),
             null,
             4
         );

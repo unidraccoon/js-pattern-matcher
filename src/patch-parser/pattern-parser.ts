@@ -1,5 +1,4 @@
 import { Expression } from "@babel/types";
-// import traverse from "@babel/traverse";
 
 import { makeExpressionAST } from "../ast-builder/ast-builder";
 

@@ -1,24 +1,38 @@
 [
-    [
-        {
-            "type": "ObjectExpression",
-            "start": 6,
-            "end": 23,
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 6
-                },
-                "end": {
-                    "line": 1,
-                    "column": 23
-                }
+    {
+        "type": "ObjectExpression",
+        "start": 6,
+        "end": 23,
+        "loc": {
+            "start": {
+                "line": 1,
+                "column": 6
             },
-            "properties": [
-                {
-                    "type": "ObjectProperty",
+            "end": {
+                "line": 1,
+                "column": 23
+            }
+        },
+        "properties": [
+            {
+                "type": "ObjectProperty",
+                "start": 7,
+                "end": 22,
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 7
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 22
+                    }
+                },
+                "method": false,
+                "key": {
+                    "type": "Identifier",
                     "start": 7,
-                    "end": 22,
+                    "end": 10,
                     "loc": {
                         "start": {
                             "line": 1,
@@ -26,51 +40,35 @@
                         },
                         "end": {
                             "line": 1,
+                            "column": 10
+                        },
+                        "identifierName": "url"
+                    },
+                    "name": "url"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                    "type": "StringLiteral",
+                    "start": 12,
+                    "end": 22,
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 12
+                        },
+                        "end": {
+                            "line": 1,
                             "column": 22
                         }
                     },
-                    "method": false,
-                    "key": {
-                        "type": "Identifier",
-                        "start": 7,
-                        "end": 10,
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 7
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 10
-                            },
-                            "identifierName": "url"
-                        },
-                        "name": "url"
+                    "extra": {
+                        "rawValue": "/example",
+                        "raw": "'/example'"
                     },
-                    "computed": false,
-                    "shorthand": false,
-                    "value": {
-                        "type": "StringLiteral",
-                        "start": 12,
-                        "end": 22,
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 12
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 22
-                            }
-                        },
-                        "extra": {
-                            "rawValue": "/example",
-                            "raw": "'/example'"
-                        },
-                        "value": "/example"
-                    }
+                    "value": "/example"
                 }
-            ]
-        }
-    ]
+            }
+        ]
+    }
 ]
