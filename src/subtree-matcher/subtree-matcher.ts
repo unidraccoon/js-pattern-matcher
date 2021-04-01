@@ -9,10 +9,14 @@ const NOT_MATCHED = new Set([
     "start",
     "end",
     "extra",
+    "id",
     "alternate",
     "leadingComments",
     "trailingComments",
+    "innerComments"
 ]);
+
+const COMMENT_TYPES = ["CommentBlock", "CommentLine"];
 
 type matchType = "Statements" | "ObjectExpression";
 
