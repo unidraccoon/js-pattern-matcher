@@ -1,5 +1,31 @@
 # JavaScript Pattern Matcher
 
+## Установка
+
+1. `git clone https://github.com/unidraccoon/js-pattern-matcher.git`
+2. `cd js-pattern-matcher`
+3. `npm install`
+4. `tsc`
+
+## Использование
+
+`node src/main.js --patch "patch.txt" --file "test.js"`
+
+```console
+Usage: main.js --file [JavaScript file path] --patch [Patch file path]
+
+Опции:
+  --help     Показать помощь                                       [булевый тип]
+  --version  Показать номер версии                                 [булевый тип]
+  --patch                                           [строковой тип] [необходимо]
+  --file                                            [строковой тип] [необходимо]
+```
+
+Инструмент получает на вход два файла:
+
+* `patch` - путь до патча
+* `file` - JavaScript файл в котором необзоим поиск
+
 ## Описание синтаксиса патча
 
 Патч делится на две части разделенные `---`
@@ -8,34 +34,40 @@
 
 * Вторая часть отвечает за то, что мы хотим получить из найденной части кода
 
+*Пример:*
+
+```javascript
+router.$$method($$path)
+---
+console.log($$method.name, $$path.value)
+```  
+
 ### Первая часть патча
 
-Первая часть патча представляет собой модифицированный JavaScript который описывает уловие для поиска кода:
+Первая часть патча представляет собой JavaScript который описывает уcловие для поиска кода:
 
-1. Специальные обозначения:
+* Метапеременные начинаются с `$$`
+*Пример:* `$$identifireName`).
 
-* `/**/` — применяется к идентификаторам, означает что идентификатор становится метапеременной
-*Пример:* `identifireName/**/`).
-* `/*%name%*/`  — обозначение для именования части кода (поддерева в AST), далее по данному имени можно получать доступ к свойствам поддерева.
+* Для отдельного поиска объектных литералов их необходимо обернуть в скобки:
+
+```javascript
+({
+ url: 'example.com', 
+})
+```
+
+* Если необходимо опустить код в блоке, нужно поставить комментарий в этом месте.
 
 *Пример:*
 
 ```javascript
-/*exprs*/document.write(location.href)
----
-return expers.loc
-```  
-
-2. Код не обязательно должен быть валидным, а именно:
-
-```javascript
-// Интерпретируется как объектный литерал
-{
- url: 'example.com', 
-}
+router.get($$path, function (req, res, next) {
+    /*...*/
+})
 ```
 
-3. Ищутся совпадения:
+1. Ищутся совпадения:
 
 * На синтаксическом уровне (уровне AST) , то есть в частности совпадение до различий в интервалах, отступах и комментариях
 * До выбора имен переменных (метапеременные)
@@ -43,32 +75,37 @@ return expers.loc
 
 ### Вторая часть патча
 
-Вторая часть патча состоит из чистого языка JavaScript.
-В ней происходит оперирование сущностями (метапеременные, именованные поддеревья), извлеченными из первой части части.
+Вторая часть патча так же состоит из JavaScript-кода.
+В ней происходит оперирование сущностями (метапеременными), извлеченными из первой части части.
+
 Выражение вычисляется для каждого найденного поддерева и от второй части зависит вывод программы.
+
+Для вывода необходимой информации необходимо использовать `console.log()`.
+
+Для завершения выполнения используется команда `exit(1)`.
 
 ## Примеры
 
-1. Аргументы депов (Клиентский код)
+* Аргументы депов (Клиентский код)
 
 ```javascript
-{
-    url: url/**/,
-    method: method/**/,
-}
+({
+    url: $$url,
+    method: $$method,
+})
 ---
-if (!(url.type == "StringLiteral" && method.type == "StringLiteral")) {
-    return;
+if (!($$url.type == "StringLiteral" && $$method.type == "StringLiteral")) {
+    exit(1);
 }
-return {url: url.value, method: method.value}
+console.log({url: $$url.value, method: $$method.value})
 ```
 
 *Ввод:*
 
 ```javascript
 $.ajax({
-    "method": "GET",
     url: "http://example.com",
+    method: "GET",
 })
 ```
 
@@ -76,26 +113,25 @@ $.ajax({
 
 ```javascript
 {
-    "url": "http://example.com"
-    "method": "GET"
+    url: "http://example.com"
+    method: "GET"
 }
 ```
 
-2. Поиск routes (Серверный код)
+* Поиск routes (Серверный код)
 
 ```javascript
-/*exprs*/router/**/.method/**/(path/**/, function () {
+$$router.$$method($$path, function (req, res, next) {
     /*...*/
 })
 ---
-if (!(method.type == "Identifier" && path.type == "StringLiteral")) {
-    return;
+if (!($$method.type == "Identifier" && $$path.type == "StringLiteral")) {
+    exit(1);
 }
-const {name} = method, {value} = path;
+const {name} = $$method, {value} = $$path;
 const methods = ["get", "post", "put", "delete", "patch"]
 if (methods.includes(name)) {
-    const {loc} = exprs;
-    return {value, loc};
+    console.log(value);
 }
 ```
 
@@ -110,36 +146,20 @@ router.get('/events', function (req, res, next) {
 *Вывод:*
 
 ```javascript
-{
-    "value": "/events"
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 3,
-            "column": 2
-        }
-    },
-}
+/events
 ```
 
-3. Поиск запросов к базе данных (Серверный код)
+* Поиск запросов к базе данных (Серверный код)
 
 ```javascript
-/*exprs*/connection/**/.query(dbquery/**/, function () {
+$$connection.query($$dbquery, function (err, rows, fields) {
     /*...*/
 })
 ---
-if (!(dbquery.type == "StringLiteral")) {
-    return;
+if (!($$dbquery.type == "StringLiteral")) {
+    exit(1);
 }
-const {value} = dbquery;
-if (methods.includes(name)) {
-    const {loc} = exprs;
-    return {value, loc};
-}
+console.log($$dbquery.value);
 ```
 
 *Ввод:*
@@ -154,28 +174,16 @@ connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 *Вывод:*
 
 ```javascript
-{
-    "value": "SELECT 1 + 1 AS solution"
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 4,
-            "column": 2
-        }
-    },
-}
+SELECT 1 + 1 AS solution
 ```
 
-4. Поиск sink’ов для DOM-based XSS
+* Поиск sink’ов для DOM-based XSS
 
 ```javascript
-/*exprs*/document.write(location/**/.href)
+$$document.write($$location.href)
 ---
-const {loc} = exprs;
-return {loc};
+const {loc} = $$document;
+console.log(loc);
 ```
 
 *Ввод:*
@@ -187,16 +195,10 @@ document.write(location.href)
 *Вывод:*
 
 ```javascript
-{
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 29
-        }
-    },
+SourceLocation {
+  start: Position { line: 1, column: 0 },
+  end: Position { line: 1, column: 8 },
+  filename: undefined,
+  identifierName: 'document'
 }
 ```
