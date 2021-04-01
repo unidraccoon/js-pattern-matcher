@@ -1,12 +1,24 @@
-// import * as fs from "fs";
-// import { makePatternAST } from "./patch-parser/pattern-parser";
-// import { patternMatcher } from "./subtree-matcher/subtree-matcher";
-// import { makeCodeAST } from "./ast-builder/ast-builder";
+#!/usr/bin/env node
 
-// let patchFile = fs.readFileSync("patch.txt", "utf8");
-// let pattern = patchFile.slice(0, patchFile.indexOf("---"));
+import * as fs from "fs";
+import yargs = require("yargs/yargs");
 
-// let patternAST = makePatternAST(pattern);
-// let codeAST = makeCodeAST("router.get('/events')");
+import { parsePatch, Patch } from "./patch-parser/patch-parser";
+import { makeCodeAST } from "./ast-builder/ast-builder";
+import { patternMatcher } from "./subtree-matcher/subtree-matcher";
+import { makePatternAST } from "./patch-parser/pattern-parser";
 
-// console.log(patternMatcher(codeAST, patternAST));
+const argv = yargs(process.argv.slice(2))
+    .usage("Usage: $0 --file [JavaScript file path] --patch [Patch file path]")
+    .options({
+        patch: { type: "string" },
+        file: { type: "string" },
+    })
+    .demandOption(["patch", "file"]).argv;
+
+let patch: Patch = parsePatch(argv.patch);
+
+let codeAST = makeCodeAST(fs.readFileSync(argv.file, "utf8"));
+let patternAST = makePatternAST(patch.pattern);
+
+patternMatcher(codeAST, patternAST, patch.predicate);

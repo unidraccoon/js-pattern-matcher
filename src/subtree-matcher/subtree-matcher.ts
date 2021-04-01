@@ -92,7 +92,7 @@ export function patternMatcher(
     codeAST: File,
     patternAST: any,
     predicate: string
-): any[] {
+) {
     let foundSubtrees: string[] = [];
     if (Object.keys(patternAST).includes("type")) {
         traverse(codeAST, {
@@ -131,27 +131,5 @@ export function patternMatcher(
                 }
             },
         });
-        return foundSubtrees;
     }
 }
-
-let pattern = makePatternAST(`({url: $$url})`);
-let code = makeCodeAST(`$.ajax({
-	url: "http://example.com",
-})`);
-// let code = makeCodeAST(
-//     "if (1>2) { if (a > c) { fetch(); while (true) { fetch('hui') } } }"
-// );
-// console.log(JSON.stringify(pattern, null, 4));
-
-console.log(
-    patternMatcher(
-        code,
-        pattern,
-        `if (!($$url.type == "StringLiteral")) {
-    console.log("vdfv")
-}
-
-console.log({url: $$url.value})`
-    )
-);
