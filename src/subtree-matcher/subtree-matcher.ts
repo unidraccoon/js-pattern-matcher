@@ -114,8 +114,11 @@ export function patternMatcher(
                                     matcher.metavariables
                                 )
                             );
-                        } catch {
-                            // TODO: exception handler
+                        } catch(e) {
+                            if (e != "Exit") {
+                                console.log(e);
+                                process.exit;
+                            }
                         }
                     }
                 }
@@ -128,8 +131,8 @@ export function patternMatcher(
                 if (path.node.body?.length >= patternAST.length) {
                     for (
                         let i = 0;
-                        i < path.node.body.length;
-                        i += patternAST.length
+                        i <= path.node.body.length - patternAST.length;
+                        i += 1
                     ) {
                         let matcher: Matcher = new Matcher(
                             patternAST,
@@ -145,8 +148,11 @@ export function patternMatcher(
                                         matcher.metavariables
                                     )
                                 );
-                            } catch {
-                                // TODO: exception handler
+                            } catch(e) {
+                                if (e != "Exit") {
+                                    console.log(e);
+                                    process.exit;
+                                }
                             }
                         }
                     }
