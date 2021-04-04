@@ -1,8 +1,6 @@
 import * as vm from "vm";
 import traverse from "@babel/traverse";
 import { File } from "@babel/types";
-import { makePatternAST } from "../patch-parser/pattern-parser";
-import { makeCodeAST } from "../ast-builder/ast-builder";
 
 const NOT_MATCHED = new Set([
     "loc",
@@ -13,7 +11,7 @@ const NOT_MATCHED = new Set([
     "alternate",
     "leadingComments",
     "trailingComments",
-    "innerComments"
+    "innerComments",
 ]);
 
 const COMMENT_TYPES = ["CommentBlock", "CommentLine"];
@@ -36,8 +34,8 @@ class Matcher {
                     console.log(...args);
                 },
             },
-            exit: (exitCode: number) => {
-                process.exit(exitCode);
+            exit: () => {
+                throw "Exit";
             },
         };
         this.isMatch = false;
@@ -108,10 +106,17 @@ export function patternMatcher(
                         "ObjectExpression"
                     );
                     if (matcher.isMatch) {
-                        vm.createContext(matcher.metavariables);
-                        foundSubtrees.push(
-                            vm.runInContext(predicate, matcher.metavariables)
-                        );
+                        try {
+                            vm.createContext(matcher.metavariables);
+                            foundSubtrees.push(
+                                vm.runInContext(
+                                    predicate,
+                                    matcher.metavariables
+                                )
+                            );
+                        } catch {
+                            // TODO: exception handler
+                        }
                     }
                 }
             },
@@ -120,17 +125,30 @@ export function patternMatcher(
     } else {
         traverse(codeAST, {
             enter(path) {
-                if (path.node.body?.length == patternAST.length) {
-                    let matcher: Matcher = new Matcher(
-                        patternAST,
-                        path.node.body,
-                        "ObjectExpression"
-                    );
-                    if (matcher.isMatch) {
-                        vm.createContext(matcher.metavariables);
-                        foundSubtrees.push(
-                            vm.runInContext(predicate, matcher.metavariables)
+                if (path.node.body?.length >= patternAST.length) {
+                    for (
+                        let i = 0;
+                        i < path.node.body.length;
+                        i += patternAST.length
+                    ) {
+                        let matcher: Matcher = new Matcher(
+                            patternAST,
+                            path.node.body.slice(i, i + patternAST.length),
+                            "Statements"
                         );
+                        if (matcher.isMatch) {
+                            try {
+                                vm.createContext(matcher.metavariables);
+                                foundSubtrees.push(
+                                    vm.runInContext(
+                                        predicate,
+                                        matcher.metavariables
+                                    )
+                                );
+                            } catch {
+                                // TODO: exception handler
+                            }
+                        }
                     }
                 }
             },
