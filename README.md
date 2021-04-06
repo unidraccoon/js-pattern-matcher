@@ -12,7 +12,7 @@
 `node src/main.js --patch "patch.txt" --file "test.js"`
 
 ```console
-Usage: main.js --file [JavaScript file path] --patch [Patch file path]
+Usage: main.js --file [JavaScript file path or folder] --patch [Patch file path]
 
 Опции:
   --help     Показать помощь                                       [булевый тип]
@@ -24,7 +24,7 @@ Usage: main.js --file [JavaScript file path] --patch [Patch file path]
 Инструмент получает на вход два файла:
 
 * `patch` - путь до патча
-* `file` - JavaScript файл в котором необзоим поиск
+* `file` - JavaScript файл в котором необходим поиск или папка где будут искаться JavaScript файлы
 
 ## Описание синтаксиса патча
 
