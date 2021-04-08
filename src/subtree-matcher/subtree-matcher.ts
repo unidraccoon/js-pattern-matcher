@@ -16,7 +16,7 @@ const NOT_MATCHED = new Set([
 
 const COMMENT_TYPES = ["CommentBlock", "CommentLine"];
 
-type matchType = "Statements" | "ObjectExpression";
+type matchType = "Statements" | "Expression";
 
 class Matcher {
     patternAST: any;
@@ -40,7 +40,7 @@ class Matcher {
         };
         this.isMatch = false;
 
-        if (type == "ObjectExpression") {
+        if (type == "Expression") {
             this.isMatch = this.matchAST(patternAST, codeSubtreeAST);
         } else if (type == "Statements") {
             for (let i in patternAST) {
@@ -103,7 +103,7 @@ export function patternMatcher(
                     let matcher: Matcher = new Matcher(
                         patternAST,
                         path.node,
-                        "ObjectExpression"
+                        "Expression"
                     );
                     if (matcher.isMatch) {
                         try {
@@ -114,7 +114,7 @@ export function patternMatcher(
                                     matcher.metavariables
                                 )
                             );
-                        } catch(e) {
+                        } catch (e) {
                             if (e != "Exit") {
                                 console.log(e);
                                 process.exit;
@@ -148,7 +148,7 @@ export function patternMatcher(
                                         matcher.metavariables
                                     )
                                 );
-                            } catch(e) {
+                            } catch (e) {
                                 if (e != "Exit") {
                                     console.log(e);
                                     process.exit;
